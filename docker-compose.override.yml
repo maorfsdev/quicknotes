@@ -1,0 +1,42 @@
+version: '3.8'
+
+# Development overrides for live reload
+services:
+  api1:
+    build:
+      context: ./backend
+      target: builder
+    command: npm run start:dev
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/scripts:/app/scripts
+    environment:
+      NODE_ENV: development
+    ports:
+      - "3001:3000"
+
+  api2:
+    build:
+      context: ./backend
+      target: builder
+    command: npm run start:dev
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/scripts:/app/scripts
+    environment:
+      NODE_ENV: development
+    ports:
+      - "3002:3000"
+
+  frontend:
+    build:
+      context: ./frontend
+      target: builder
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    environment:
+      - VITE_API_URL=http://localhost:8080
+    ports:
+      - "5173:5173"
